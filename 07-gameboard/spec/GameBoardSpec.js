@@ -73,6 +73,15 @@ describe("Clase GameBoardSpec", function(){
   afterEach(function(){
   	Game = oldGame;
   });
+	
+	//Test add
+	it("add", function(){ 
+		//spyOn(GameBoard, "add").andCallThrough();
+		var board = new GameBoard();
+		var ship = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
+		board.add(ship);
+		expect (board.objects[0]).toEqual(ship);
+	});
 
 });
 
