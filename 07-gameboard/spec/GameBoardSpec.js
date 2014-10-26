@@ -112,7 +112,27 @@ describe("Clase GameBoardSpec", function(){
 		expect (board.objects[0]).toEqual(ship); //ship sigue estando en objects
 		expect (board.removed[0]).toEqual(ship);
 		board.finalizeRemoved();
+		expect (board.finalizeRemoved).toHaveBeenCalled();
 		expect (board.objects[0]).toEqual(undefined); //objects esta vacio
+	});
+
+	//iterate
+	it("iterate", function(){ 
+		var board = new GameBoard();
+		spyOn(board,"iterate");			
+	});
+
+	//detect
+	it("detect", function(){ 
+		var board = new GameBoard();
+		var ship1 = {ship1: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
+		var ship2 = {ship2: { sx: 1, sy: 0, w: 37, h: 42, frames: 1 }};
+		var ship3 = {ship3: { sx: 2, sy: 0, w: 37, h: 42, frames: 1 }};
+		board.add(ship1);
+		board.add(ship2);
+		board.add(ship3);
+		var ret = board.detect((obj){return this.sx === 2});
+		expect(ret).toEqual(ship3);
 	});
 
 });
