@@ -1,0 +1,71 @@
+En los tests de alien-invasion-parte-1-con-soluciones hay
+comportamientos anómalos: ¿Qué ocurre si pinchas sobre test Starfield?
+¿Qué ocurre si en SpecRunner.html cambiamos el orden, y ponemos
+primero el test de StarField?
+
+¡En ninguno de los dos casos funciona el test de StarField!
+
+El test de StarField necesita que se halla llamado a Game.initialize.
+¿Por qué? Porque para inicializar el canvas de StarField se usa
+Game.width y Game.height.  Cuando ejecutamos SpecRunner.html se
+ejecuta el test de StarField después del test de SpriteSheet, y en
+éste último se llama a Game.initialize. Por eso pasa el test de Starfield.
+
+Sin embargo, cuando pulsamos sólo sobre el test de Starfield, no se
+está ejecutando antes el de SpriteSheet y por tanto no se está
+llamando a Game.initialize. 
+
+El test de Starfield no es independiente del test de SpriteSheet. Para
+hacerlo independiente, añadimos llamada a Game.initialize explícita en
+el test de Starfield: Game.initialize("game",sprites,startGame);
+
+Ahora sí es independiente.
+
+Mejor aún que eso, creemos un Game fake para el test de Starfield:
+
+Game = {width: 320, height:480};
+
+Esta solución sin embargo puede hacer que tests posteriores dejen de
+funcionar. Vamos a ver otra instancia de este problema.
+
+----
+¿Qué ocurre si pinchas sobre test PlayerShip? De nuevo, no funciona.
+
+Necesitamos que se inicialice Game para que esté cargado el sprite de
+la nave. Para ello podemos añadir llamada a Game.initialize:
+	Game.initialize("game",sprites,startGame);
+
+Y... no funciona. Dice que Game.initialize no está definido. ¿Por qué?
+¡Porque hemos cambiado Game en el test de TitleScreen! Como parte del
+test de TitleScreen hemos asignado a Game un objeto dummy. 
+
+La solución, generalizable a los demás tests, es que cada test deje
+como se encuentra lo que toque. En particular, el test TitleScreen
+debe dejar como se encuentra la variable Game. Lo podemos hacer así:
+
+    beforeEach(function(){
+	oldGame = Game;
+    });
+
+    afterEach(function(){
+        Game = oldGame;
+    });
+
+Así ya podemos llamara Game.initilize en el beforeEach de PlayerShip.
+
+Una última mejora. En realidad de Game.initialize sólo necesitamos que
+cargue la hoja de sprites. En lugar de llamar a Game.initialize por
+tanto podemos cargar lso prites:
+
+      SpriteSheet.load(sprites,function(){});
+
+---
+
+Ojo, si PlayerShip también toca Game, aplicando lo aprendido, debería
+dejar las cosas como se las encuentra él también, por lo que
+modificamos beforeEach y afterEach para que deje Game como estaba.
+
+---
+
+Todos estos cambios están aplicados en los tests que proporcionamos en
+la parte 2 de Alien Invasion.

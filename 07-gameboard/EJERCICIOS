@@ -1,0 +1,125 @@
+¿Cómo usar este material?:
+
+- Ejecuta el juego finalizado: http://cykod.github.io/AlienInvasion/
+
+- Para cada prototipo, primero leemos los tests, y los interpretamos
+  como especificaciones de los requisitos del prototipo
+
+- Después leemos el código y ejecutamos el prototipo: firefox
+  index.html
+  
+- Luego comprobamos si pasan los tests: firefox SpecRunner.html
+
+- Finalmente, realizamos cambios a los tests / código según requieran
+  los ejercicios
+
+- El programa Alien Invasion es un juego para móviles de tipo
+  shooter que se presenta en el libro de Pascal Rettig Professional
+  HTML5 Mobile Game Development (Disponible en Safari a través de
+  la biblioteca).
+
+
+EJERCICIOS
+
+1. Al igual que hemos ido haciendo en las iteraciones 02-06 de la
+   Parte 1, en este primer prototipo de la Parte 2 hemos recuperado
+   todos los tests del último prototipo desarrollado en la Parte 1
+   (prototipo 06-player). Comprueba que esos tests siguen pasando en
+   este prototipo, antes y después de modificarlo. 
+
+   En particular, comprueba que los tests pasan individualmente cuando
+   pinchas encima de cada uno de ellos, dado que hemos hecho que cada
+   test sea independiente, dejando los objetos que manipula en el
+   mismo estado que se los encuentra. Consulta las secciones
+   beforeEach y afterEach de los tests de StarfieldSpec.js,
+   TitleScreenSpec.js y PlayerShipSpec.js y lee el fichero spec/NOTAS
+
+   Asegúrate de que entiendes este código de los tests, pues es
+   necesario que todos los tests que añadas en esta práctica sean
+   independientes, y por tanto puedan ejecutarse en cualquier orden,
+   independientemente del resto de los tests.
+
+2. Consulta la especificación de este prototipo en el fichero
+   spec/GameBoardSpec.js. En ese fichero podrás leer una descripción
+   de los requisitos definidos para este prototipo y una
+   especificación del constructor GameBoard que se ha implementado en
+   este prototipo para satisfacer dichos requisitos.
+
+3. Estudia la implementación de GameBoard: en el fichero engine.js se
+   ha añadido el constructor GameBoard (en un lenguaje Orientado a
+   Objetos con herencia clásica hablaríamos de *la clase*
+   GameBoard). Se ha añadido a engine.js y no a game.js porque el
+   código de GameBoard puede servirnos para otros juegos. Mantenemos
+   en game.js el código específico del juego Alien Invasion y dejamos
+   en engine.js el código reutilizable para otros juegos.
+
+   En el fichero game.js se ha modificado la función playGame() para
+   que la nave ahora no se añada como un board al juego, tal como se
+   hacía en el prototipo 06. Ahora se crea un GameBoard, al que se
+   añade la nave del usuario. Es el GameBoard el que es añadido
+   finalmente, como un tablero más, en la posición 3, mediante la
+   llamada a Game.setBoard(3, board). 
+
+
+4. Escribe en el fichero spec/GameBoardSpec.js pruebas unitarias para
+   la clase GameBoard.
+
+   Las pruebas/tests que escribas deben probar/testar única y
+   exclusivamente la funcionalidad de la clase que estás testando en
+   estas pruebas unitarias: GameBoard. Para ello deberás crear un
+   objeto de clase GameBoard y escribir código en el test que pruebe
+   si sus métodos tienen un comportamiento correcto, escribiendo
+   sentencias expect que comprueben que dichos métodos devuelven los
+   resultados esperados, y que invocan a otros objetos para producir
+   en ellos los efectos externos esperados (por ejemplo mostrar en el
+   contexto de un canvas un sprite).
+
+   Cuando el objetivo de un método de GameBoard que estés testando sea
+   devolver algún valor que depende de sus parámetros, lo único que
+   deberás testar es si el método devuelve los valores adecuados para
+   las entradas que se proporcionan en los diferentes casos de test
+   que crees. Un ejemplo de este tipo de método es
+   GameBoard.overlap(). Para testarlo basta con crear parejas de
+   objetos dummy o dobles (como los actores de doblaje o los muñecos
+   de las pruebas de impacto de automóviles), y pasarlos como
+   parámetros a overlap(), comprobando que overlap() devuelve el valor
+   adecuado en función de las propiedades de los objetos dummy que le
+   hayas pasado como parámetro.
+
+   Si por el contrario la principal función del método que estás
+   testando es producir efectos externos en otros objetos auxiliares
+   (ej. mostrar un sprite en el contexto de un canvas), para lo cuál
+   el método que estás testando llama a métodos de dichos objetos
+   auxiliares, tienes que tener cuidado de NO acabar escribiendo en
+   tus tests unitarios código que teste el comportamiento de los
+   objetos auxiliares a los que se llama: ya habrá en el futuro otras
+   pruebas unitarias para dichos objetos auxiliares, si es que aún no
+   las hay.
+
+   Para esos otros objetos auxiliares que no son el objetivo de tu
+   test unitario de GameBoard, a los que se debe invocar desde
+   GameBoard, debes crear objetos dummy/dobles cuyos métodos devuelvan
+   valores ad hoc adecuados para la prueba que estás realizando,
+   generados sintéticamente por tu objeto dummy, sin necesidad de que
+   se ejecute el código real de dichos objetos, ya que no son el
+   objetivo de esta prueba unitaria.
+
+   Si dichos objetos auxiliares no devuelven nada, pero es necesario
+   que se llame a sus métodos desde un método de GameBoard para que se
+   produzca cierto efecto externo, basta con comprobar que el método
+   de GameBoard los ha llamado con los parámetros adecuados. El método
+   draw() de GameBoard es un ejemplo de este tipo. Puedes utilizar
+   .toHaveBeenCalled() o .toHaveBeenCalledWith() para testar si se ha
+   llamado a los métodos de los objetos auxiliares
+
+
+5. Utiliza Underscore para que la implementación de los métodos de
+   GameBoard iterate() y detect() se realice con una sola llamada a
+   una función de Underscore. Explora underscorejs.org para elegir las
+   funciones más apropiadas.
+
+6. Utiliza las pruebas unitarias realizadas en el paso 4 como red para
+   asegurarte de que la reimplementación realizada en el paso 5 no ha
+   provocado que algunos tests que antes funcionaban, dejen de
+   funcionar tras implementar los cambios sugeridos en el apartado 5.
+
