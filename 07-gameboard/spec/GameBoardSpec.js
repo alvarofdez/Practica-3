@@ -76,11 +76,43 @@ describe("Clase GameBoardSpec", function(){
 	
 	//Test add
 	it("add", function(){ 
-		//spyOn(GameBoard, "add").andCallThrough();
 		var board = new GameBoard();
+		spyOn(board,"add").andCallThrough();
 		var ship = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
 		board.add(ship);
+		expect (board.add).toHaveBeenCalled();
 		expect (board.objects[0]).toEqual(ship);
+	});
+
+	//Test remove / resetRemoved / finalizeRemoved
+	it("remove / resetRemoved / finalizeRemoved", function(){ 
+		var board = new GameBoard();
+		spyOn(board, "remove").andCallThrough();
+		spyOn(board, "resetRemoved").andCallThrough();
+		spyOn(board, "finalizeRemoved").andCallThrough();
+		var ship = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
+		//resetRemoved
+		board.resetRemoved();
+		expect (board.resetRemoved).toHaveBeenCalled();
+		var emptyArry = [];
+		expect (board.removed).toEqual (emptyArry);
+		board.remove(ship);
+		expect (board.removed[0]).toEqual(ship); //removed no vacio
+		board.resetRemoved();
+		expect (board.removed).toEqual (emptyArry); //removed vacio
+		//remove
+		board.remove(ship);
+		expect (board.remove).toHaveBeenCalled();
+		expect (board.removed[0]).toEqual(ship);
+		//finalizeRemoved
+		board.resetRemoved();
+		board.add (ship); //añadimos algo a objects para que se borre
+		expect (board.objects[0]).toEqual(ship);
+		board.remove(ship);	
+		expect (board.objects[0]).toEqual(ship); //ship sigue estando en objects
+		expect (board.removed[0]).toEqual(ship);
+		board.finalizeRemoved();
+		expect (board.objects[0]).toEqual(undefined); //objects esta vacio
 	});
 
 });
