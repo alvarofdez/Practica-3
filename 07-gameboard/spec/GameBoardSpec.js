@@ -78,10 +78,10 @@ describe("Clase GameBoardSpec", function(){
 	it("add", function(){ 
 		var board = new GameBoard();
 		spyOn(board,"add").andCallThrough();
-		var ship = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
-		board.add(ship);
+		var obj = {x: 0, y: 0};
+		board.add(obj);
 		expect (board.add).toHaveBeenCalled();
-		expect (board.objects[0]).toEqual(ship);
+		expect (board.objects[0]).toEqual(obj);
 	});
 
 	//Test remove / resetRemoved / finalizeRemoved
@@ -90,27 +90,27 @@ describe("Clase GameBoardSpec", function(){
 		spyOn(board, "remove").andCallThrough();
 		spyOn(board, "resetRemoved").andCallThrough();
 		spyOn(board, "finalizeRemoved").andCallThrough();
-		var ship = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
+		var obj = {x: 0, y: 0};
 		//resetRemoved
 		board.resetRemoved();
 		expect (board.resetRemoved).toHaveBeenCalled();
 		var emptyArry = [];
 		expect (board.removed).toEqual (emptyArry);
-		board.remove(ship);
-		expect (board.removed[0]).toEqual(ship); //removed no vacio
+		board.remove(obj);
+		expect (board.removed[0]).toEqual(obj); //removed no vacio
 		board.resetRemoved();
 		expect (board.removed).toEqual (emptyArry); //removed vacio
 		//remove
-		board.remove(ship);
+		board.remove(obj);
 		expect (board.remove).toHaveBeenCalled();
-		expect (board.removed[0]).toEqual(ship);
+		expect (board.removed[0]).toEqual(obj);
 		//finalizeRemoved
 		board.resetRemoved();
-		board.add (ship); //añadimos algo a objects para que se borre
-		expect (board.objects[0]).toEqual(ship);
-		board.remove(ship);	
-		expect (board.objects[0]).toEqual(ship); //ship sigue estando en objects
-		expect (board.removed[0]).toEqual(ship);
+		board.add (obj); //añadimos algo a objects para que se borre
+		expect (board.objects[0]).toEqual(obj);
+		board.remove(obj);	
+		expect (board.objects[0]).toEqual(obj); //obj sigue estando en objects
+		expect (board.removed[0]).toEqual(obj);
 		board.finalizeRemoved();
 		expect (board.finalizeRemoved).toHaveBeenCalled();
 		expect (board.objects[0]).toEqual(undefined); //objects esta vacio
@@ -130,14 +130,14 @@ describe("Clase GameBoardSpec", function(){
 	//detect
 	it("detect", function(){ 
 		var board = new GameBoard();
-		var ship1 = {ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }};
-		var ship2 = {ship: { sx: 1, sy: 0, w: 37, h: 42, frames: 1 }};
-		var ship3 = {ship: { sx: 2, sy: 0, w: 37, h: 42, frames: 1 }};
-		board.add(ship1);
-		board.add(ship2);
-		board.add(ship3);
-		var ret = board.detect(function(obj){return this.ship.sx === 2})
-		expect(ret).toEqual(ship3);
+		var obj1 = {x: 1, y: 0};
+		var obj2 = {x: 2, y: 0};
+		var obj3 = {x: 3, y: 0};
+		board.add(obj1);
+		board.add(obj2);
+		board.add(obj3);
+		var ret = board.detect(function(obj){return this.x === 3})
+		expect(ret).toEqual(obj3);
 	});	
 	
 	//step
@@ -162,6 +162,17 @@ describe("Clase GameBoardSpec", function(){
 		board.add(obj);
 		board.draw(ctx);
 		expect(obj.draw).toHaveBeenCalled();
+	});
+	
+	//draw
+	it ("overlap", function(){
+		var board = new GameBoard();
+		var obj1 = {x: 15, y: 15, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		expect (board.overlap(obj1, obj2)).toBe(true); //muy juntos
+		var obj1 = {x: 35, y: 25, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		expect (board.overlap(obj1, obj2)).toBe(false); //muy separados
 	});
 
 });
