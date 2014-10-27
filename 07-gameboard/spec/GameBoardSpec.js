@@ -153,6 +153,16 @@ describe("Clase GameBoardSpec", function(){
 		expect(obj.step).toHaveBeenCalled();
 		expect(board.finalizeRemoved).toHaveBeenCalled();
 	});
+	
+	//draw
+	it ("draw", function(){
+		var board = new GameBoard();
+		var obj = {draw: function(){}};
+		spyOn(obj, "draw");
+		board.add(obj);
+		board.draw(ctx);
+		expect(obj.draw).toHaveBeenCalled();
+	});
 
 });
 
