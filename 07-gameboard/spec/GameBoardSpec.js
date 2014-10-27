@@ -139,6 +139,20 @@ describe("Clase GameBoardSpec", function(){
 		var ret = board.detect(function(obj){return this.ship.sx === 2})
 		expect(ret).toEqual(ship3);
 	});	
+	
+	//step
+	it("step", function(){ 
+		var board = new GameBoard();
+		var obj = {step:function(){}};
+		spyOn (obj, "step");
+		spyOn (board, "resetRemoved");
+		spyOn (board, "finalizeRemoved");
+		board.add(obj);
+		board.step(1);
+		expect(board.resetRemoved).toHaveBeenCalled();
+		expect(obj.step).toHaveBeenCalled();
+		expect(board.finalizeRemoved).toHaveBeenCalled();
+	});
 
 });
 
