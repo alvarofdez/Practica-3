@@ -164,7 +164,7 @@ describe("Clase GameBoardSpec", function(){
 		expect(obj.draw).toHaveBeenCalled();
 	});
 	
-	//draw
+	//overlap
 	it ("overlap", function(){
 		var board = new GameBoard();
 		var obj1 = {x: 15, y: 15, h:4, w:6};
@@ -174,7 +174,19 @@ describe("Clase GameBoardSpec", function(){
 		var obj2 = {x: 14, y: 16, h:3, w:6};
 		expect (board.overlap(obj1, obj2)).toBe(false); //muy separados
 	});
-
+	
+	//collide
+	it ("collide", function(){
+		var board = new GameBoard();
+		var obj1 = {x: 15, y: 15, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		var obj3 = {x: 14, y: 16, h:3, w:6};
+		board.add(obj1);
+		board.add(obj2);
+		board.add(obj3);
+		expect (board.collide(obj1)).toEqual(obj2);
+	});	
+	
 });
 
 
