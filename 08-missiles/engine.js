@@ -6,14 +6,11 @@
 // Estos dos métodos son implementados por: las pantallas iniciales y
 // final del juego, los sprites que se muestran en la pantalla
 // (jugador, enemigo, proyectiles, y los elementos como el marcador de
-// puntuación o el número de vidas.
-
-
-
+// puntuación o el número de vidas. 
 
 // Objeto singleton Game: se guarda una unica instancia del
 // constructor anónimo en el objeto Game
-var Game = new function() {                                                                  
+var Game = new function() {                                                          
 
     // Inicializa el juego
     this.initialize = function(canvasElementId,sprite_data,callback) {
@@ -203,24 +200,35 @@ var GameBoard = function() {
     }
 
 
-    // Iterador que aplica el método funcName a todos los
-    // objetos de objects
-    this.iterate = function(funcName) {
-	// Convertimos en un array args (1..)
-	var args = Array.prototype.slice.call(arguments,1);
-
-	for(var i=0, len=this.objects.length; i<len;i++) {
-	    var obj = this.objects[i];
-	    obj[funcName].apply(obj,args)
-	}
-    };
+  // Iterador que aplica el método funcName a todos los
+  // objetos de objects
+  this.iterate = function(funcName) {
+		// Convertimos en un array args (1..)
+		//for(var i=0, len=this.objects.length; i<len;i++) {
+	    //var obj = this.objects[i];
+	    //obj[funcName].apply(obj,args)
+		//}
+		var args = Array.prototype.slice.call(arguments,1);
+		var f = function (obj){
+			obj[funcName].apply(obj,args);
+		};
+		_.each(this.objects, f);
+  };
 
     // Devuelve el primer objeto de objects para el que func es true
     this.detect = function(func) {
-	for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
-	    if(func.call(this.objects[i])) return this.objects[i];
-	}
-	return false;
+			var f = function (obj){
+				return func.call (obj)
+			};
+			if (evens = _.filter(this.objects, f)) {
+				return evens [0];
+			}else{
+				return false;
+			};
+			//for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
+	    	//if(func.call(this.objects[i])) return this.objects[i];
+			//}
+			//return false;
     };
 
     // Cuando Game.loop() llame a step(), hay que llamar al método

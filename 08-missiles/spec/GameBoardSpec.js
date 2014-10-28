@@ -56,3 +56,137 @@
     colisionado con objetos de cierto tipo, no con todos los objetos.
 
 */
+
+describe("Clase GameBoardSpec", function(){
+	var canvas, ctx;
+
+  beforeEach(function(){
+		loadFixtures('index.html');
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		oldGame = Game;
+		SpriteSheet.load (sprites,function(){});
+  });
+
+  afterEach(function(){
+  	Game = oldGame;
+  });
+	
+	//Test add
+	it("add", function(){ 
+		var board = new GameBoard();
+		spyOn(board,"add").andCallThrough();
+		var obj = {x: 0, y: 0};
+		board.add(obj);
+		expect (board.add).toHaveBeenCalled();
+		expect (board.objects[0]).toEqual(obj);
+	});
+
+	//Test remove / resetRemoved / finalizeRemoved
+	it("remove / resetRemoved / finalizeRemoved", function(){ 
+		var board = new GameBoard();
+		spyOn(board, "remove").andCallThrough();
+		spyOn(board, "resetRemoved").andCallThrough();
+		spyOn(board, "finalizeRemoved").andCallThrough();
+		var obj = {x: 0, y: 0};
+		//resetRemoved
+		board.resetRemoved();
+		expect (board.resetRemoved).toHaveBeenCalled();
+		var emptyArry = [];
+		expect (board.removed).toEqual (emptyArry);
+		board.remove(obj);
+		expect (board.removed[0]).toEqual(obj); //removed no vacio
+		board.resetRemoved();
+		expect (board.removed).toEqual (emptyArry); //removed vacio
+		//remove
+		board.remove(obj);
+		expect (board.remove).toHaveBeenCalled();
+		expect (board.removed[0]).toEqual(obj);
+		//finalizeRemoved
+		board.resetRemoved();
+		board.add (obj); //añadimos algo a objects para que se borre
+		expect (board.objects[0]).toEqual(obj);
+		board.remove(obj);	
+		expect (board.objects[0]).toEqual(obj); //obj sigue estando en objects
+		expect (board.removed[0]).toEqual(obj);
+		board.finalizeRemoved();
+		expect (board.finalizeRemoved).toHaveBeenCalled();
+		expect (board.objects[0]).toEqual(undefined); //objects esta vacio
+	});
+	
+	//iterate
+	it("iterate", function(){ 
+		var board = new GameBoard();
+		var empty = function(){this.f = function(){}};
+		var e1 = new empty();
+		board.add(e1);
+		spyOn(e1, "f");
+		board.iterate("f");
+		expect(e1.f).toHaveBeenCalled();			
+	});	
+	
+	//detect
+	it("detect", function(){ 
+		var board = new GameBoard();
+		var obj1 = {x: 1, y: 0};
+		var obj2 = {x: 2, y: 0};
+		var obj3 = {x: 3, y: 0};
+		board.add(obj1);
+		board.add(obj2);
+		board.add(obj3);
+		var ret = board.detect(function(obj){return this.x === 3})
+		expect(ret).toEqual(obj3);
+	});	
+	
+	//step
+	it("step", function(){ 
+		var board = new GameBoard();
+		var obj = {step:function(){}};
+		spyOn (obj, "step");
+		spyOn (board, "resetRemoved");
+		spyOn (board, "finalizeRemoved");
+		board.add(obj);
+		board.step(1);
+		expect(board.resetRemoved).toHaveBeenCalled();
+		expect(obj.step).toHaveBeenCalled();
+		expect(board.finalizeRemoved).toHaveBeenCalled();
+	});
+	
+	//draw
+	it ("draw", function(){
+		var board = new GameBoard();
+		var obj = {draw: function(){}};
+		spyOn(obj, "draw");
+		board.add(obj);
+		board.draw(ctx);
+		expect(obj.draw).toHaveBeenCalled();
+	});
+	
+	//overlap
+	it ("overlap", function(){
+		var board = new GameBoard();
+		var obj1 = {x: 15, y: 15, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		expect (board.overlap(obj1, obj2)).toBe(true); //muy juntos
+		var obj1 = {x: 35, y: 25, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		expect (board.overlap(obj1, obj2)).toBe(false); //muy separados
+	});
+	
+	//collide
+	it ("collide", function(){
+		var board = new GameBoard();
+		var obj1 = {x: 15, y: 15, h:4, w:6};
+		var obj2 = {x: 14, y: 16, h:3, w:6};
+		var obj3 = {x: 14, y: 16, h:3, w:6};
+		board.add(obj1);
+		board.add(obj2);
+		board.add(obj3);
+		expect (board.collide(obj1)).toEqual(obj2);
+	});	
+	
+});
+
+
