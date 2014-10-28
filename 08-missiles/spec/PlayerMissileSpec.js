@@ -44,16 +44,18 @@ describe("Clase PlayerMissileSpec", function(){
   afterEach(function(){
   	Game = oldGame;
   });
-	/*
+	
 	//Test step
 	it("step", function(){ 
 		var missile = new PlayerMissile(10, 20);
 		var board = new GameBoard ();
 		board.add(missile);
+    missile.board = board;
+    board.resetRemoved ();
 		missile.step(1); //deberia borrarse
-		//expect (board.removed[0]).toEqual(missile);
+		expect (board.removed[0]).toEqual(missile);
 	});
-	*/
+	
 	//Test draw	
 	it("draw", function(){
   	spyOn(SpriteSheet, "draw");
