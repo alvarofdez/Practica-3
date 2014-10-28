@@ -136,6 +136,17 @@ describe("Clase PlayerShip", function(){
 	expect(miNave.x).toEqual(Game.width - 37);
 
     });
+  
+    it("step estando pulsado espacio", function(){
+      Game = {width: 320, height: 480, keys: {'fire': true}};
+      var miNave = new PlayerShip();
+      miNave.board = new GameBoard();
+      //Hacemos como que pulsamos la barra espaciadora durante 2s
+      //solo deben añadirse 2 misiles al board
+      //comprobamos si board.objects.length es igual a 2
+      miNave.step(2); 
+      expect(miNave.board.objects.length).toBe(2);
+    });
 
 });
 

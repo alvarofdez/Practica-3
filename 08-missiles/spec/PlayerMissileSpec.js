@@ -66,5 +66,7 @@ describe("Clase PlayerMissileSpec", function(){
 	 	expect(SpriteSheet.draw.calls[0].args[2]).toEqual(missile.x);
 	 	expect(SpriteSheet.draw.calls[0].args[3]).toEqual(missile.y);
   });
+  
+  
 
 });
