@@ -1,0 +1,61 @@
+¿Cómo usar este material?:
+
+- Ejecuta el juego finalizado: http://cykod.github.io/AlienInvasion/
+
+- Para cada prototipo, primero leemos los tests, y los interpretamos
+  como especificaciones de los requisitos del prototipo
+
+- Después leemos el código y ejecutamos el prototipo: firefox
+  index.html
+  
+- Luego comprobamos si pasan los tests: firefox SpecRunner.html
+
+- Finalmente, realizamos cambios a los tests / código según requieran
+  los ejercicios
+
+- El programa Alien Invasion es un juego para móviles de tipo
+  shooter que se presenta en el libro de Pascal Rettig Professional
+  HTML5 Mobile Game Development (Disponible en Safari a través de
+  la biblioteca).
+
+
+
+EJERCICIOS
+
+0. Traslada el código que modificaste en el fichero engine.js al
+   realizar el ejercicio 5 del prototipo 07-gameboard
+   (reimplementación usando Underscore de los métodos iterate() y
+   detect()) al fichero engine.js que proporcionamos en este prototipo
+   08-missiles.
+
+1. Comprueba que todos los tests del prototipo 07 siguen pasando en
+   este prototipo. 
+
+2. Consulta la especificación de este prototipo en el fichero
+   spec/PlayerMissileSpec.js
+
+3. La especificación de requisitos del fichero spec/PlayerMissileSpec.js aparece 
+   implementada en el código que se proporciona. Estudia el código:
+
+   En el fichero game.js se ha añadido a la variable sprites la
+   definición del sprite del misil. 
+
+   También en game.js se ha modificado el código de PlayerShip para
+   que, si está pulsada la tecla de espacio y ha pasado el tiempo de
+   recarga del arma, se añadan al tablero los dos misiles disparados.
+
+   Por último, se ha añadido a game.js la clase PlayerMissile
+
+4. Escribe en el fichero spec/PlayerMissileSpec.js pruebas unitarias
+   para la clase PlayerMissileSpec
+
+5. Modifica el código para que satisfaga un nuevo requisito. En el
+   código actual, si el jugador deja pulsada la tecla de disparo, se
+   generan nuevos misiles en cuanto ha pasado el tiempo de recarga del
+   arma. Haz que el usuario tenga que volver a pulsar la tecla de
+   disparo (barra de espacio) para poder volver a disparar de nuevo,
+   de modo que si deja pulsada la tecla de disparo no se produzca un
+   nuevo disparo hasta que no la suelte y la vuelva a pulsar.
+
+6. Añade una prueba específica para comprobar que se satisface el
+   requisito definido en el apartado anterior.
